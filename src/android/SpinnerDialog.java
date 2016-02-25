@@ -11,6 +11,7 @@ import org.json.JSONException;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.widget.ProgressBar;
+import android.graphics.drawable.ColorDrawable;
 
 public class SpinnerDialog extends CordovaPlugin {
 
@@ -42,14 +43,20 @@ public class SpinnerDialog extends CordovaPlugin {
 					};
 					
 					ProgressDialog dialog;
+					
 					if (isFixed) {
 						dialog = CallbackProgressDialog.show(cordova.getActivity(), title, message, true, false, null, callbackContext);
 					} else {
 						dialog = ProgressDialog.show(cordova.getActivity(), title, message, true, true, onCancelListener);
 					}
+					ColorDrawable colorDrawable = new ColorDrawable();
+					colorDrawable.setColor(0x00000000);
+					dialog.getWindow().setBackgroundDrawable(colorDrawable);
 					
 					if (title == null && message == null) {
-						dialog.setContentView(new ProgressBar(cordova.getActivity()));
+						ProgressBar pb = new ProgressBar(cordova.getActivity());
+						pb.getIndeterminateDrawable().setColorFilter(0xff888888, android.graphics.PorterDuff.Mode.MULTIPLY);
+						dialog.setContentView(pb);
 					}
 					
 					SpinnerDialog.this.spinnerDialogStack.push(dialog);
